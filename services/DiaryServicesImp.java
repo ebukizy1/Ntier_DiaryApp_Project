@@ -1,5 +1,6 @@
 package services;
 
+import data.model.ChangeDiaryPasswordRequest;
 import data.model.Diary;
 import data.model.Entry;
 import data.repositories.DairyRepositoryImp;
@@ -10,17 +11,36 @@ import data.repositories.EntryRepository;
 public class DiaryServicesImp implements DiaryServices{
         private int count;
     private DiaryRepository diaryRepository = new DairyRepositoryImp();
-    private EntryRepository entryRepository = new EntryRepositoriesImp();
-
+//    private EntryRepository entryRepository = new EntryRepositoriesImp();
+private EntryService entryService = new EntryServiceImpl();
 
     @Override
     public void registerDiary(String username, String password) {
         validateDuplicateUsername(username);
-        Diary diary = DiaryCreated(username, password);
-        entryCreated(diary);
+        Diary diary = new Diary();
+        diary.setUsername(username);
+        diary.setPassword(password);
+        diaryRepository.save(diary);
+
+        Entry entry = new Entry();
+        entry.setDiaryID(diary.getID());
+        entryService.save(entry);
+
         count++;
     }
 
+    private Diary createNewDiaryWith(String username, String password) {
+        Diary diary = new Diary();
+        diary.setUsername(username);
+        diary.setPassword(password);
+        return diaryRepository.save(diary);
+    }
+    private void createFirstEntryFor(Diary diary) {
+        Entry entry = new Entry();
+        entry.setBody("welcome to your diary!!!!!!");
+        entry.setDiaryID(diary.getID());
+        entryService.save(entry);
+    }
 
 
 
@@ -35,10 +55,10 @@ public class DiaryServicesImp implements DiaryServices{
 
 
     @Override
-    public void changeDiaryPassword(String username, String oldPassword, String newPassword) {
-          Diary foundDiary = validateUsername(username);
-        String validPassword = validatePassword(username, oldPassword);
-            foundDiary.setPassword(newPassword);
+    public void changeDiaryPassword(ChangeDiaryPasswordRequest request) {
+          Diary foundDiary = validateUsername(request.getUsername());
+        String validPassword = validatePassword(request.getUsername(), request.getOldPassword());
+            foundDiary.setPassword(request.getNewPassword());
     }
 
 
@@ -47,12 +67,24 @@ public class DiaryServicesImp implements DiaryServices{
         Entry foundEntry = validateDiaryID(diaryId);
         foundEntry.setTitle(title);
         foundEntry.setBody(body);
+
+
+        String oldPassword = "oldPassword";
+        String newPassword = "newPassword";
+        String userName = "username";
+        ChangeDiaryPasswordRequest request = new ChangeDiaryPasswordRequest();
+        request.setNewPassword(newPassword);
+        request.setOldPassword(oldPassword);
+        request.setUsername(userName);
+        changeDiaryPassword(request);
+
     }
 
     @Override
     public void deleteDiaryEntry(int diaryId, String title) {
-        Entry foundEntry = validateDiaryID(diaryId);
-        entryRepository.deleteEntryByTitle(title);
+       validateDiaryID(diaryId);
+        entryService.deleteEntry(diaryId, title);
+//        entryRepository.deleteEntryByTitle(title);
     }
 
     @Override
@@ -88,13 +120,6 @@ public class DiaryServicesImp implements DiaryServices{
 
 
 
-    private Diary DiaryCreated(String username, String password) {
-        Diary diary = new Diary();
-        diary.setUsername(username);
-        diary.setPassword(password);
-        diaryRepository.save(diary);
-        return diary;
-    }
     private void validateTitle(String title){
        Entry foundEntry = entryRepository.findEntryByTitle(title);
         boolean isFoundDiaryNull = foundEntry != null;
@@ -102,18 +127,11 @@ public class DiaryServicesImp implements DiaryServices{
         else throw new IllegalArgumentException("title not found in the diary");
     }
 
-    private Entry validateDiaryID(int diaryId) {
-        Entry foundEntry = entryRepository.findEntryById(diaryId);
-        if (foundEntry != null) return foundEntry;
-        else throw new IllegalArgumentException("Diary ID not match try again!!");
+    private void validateDiaryID(int diaryId) {
+        Diary foundDiary = diaryRepository.findDiaryById(diaryId);
+        if (foundDiary == null) throw new IllegalArgumentException("Diary ID not match try again!!");
     }
 
-    private void entryCreated(Diary diary) {
-        Entry entry = new Entry();
-        entry.setBody("welcome to your diary!!!!!!");
-        entry.setDiaryID(diary.getID());
-        entryRepository.save(entry);
-    }
 
 
     private void validateDuplicateUsername(String username){

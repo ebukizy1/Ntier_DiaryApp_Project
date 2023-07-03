@@ -7,7 +7,7 @@ import java.util.List;
 public interface DiaryRepository {
 
 
-    void save(Diary diary);
+    Diary save(Diary diary);
     Diary findDiaryById(int id);
     List<Diary> findAllDiaries();
     void deleteDairyById(int id);

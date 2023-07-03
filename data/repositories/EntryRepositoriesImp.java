@@ -81,4 +81,15 @@ public class EntryRepositoriesImp implements EntryRepository {
         }
         return null;
     }
+
+    @Override
+    public void deleteEntry(int diaryId, String title) {
+        for(Entry entry : entries){
+            boolean isCorrectEntry = entry.getTitle().equals(title) && entry.getDiaryID() == diaryId;
+            if(isCorrectEntry) {
+                entries.remove(entry);
+                break;
+            }
+        }
+    }
 }

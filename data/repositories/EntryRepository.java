@@ -17,6 +17,5 @@ public interface EntryRepository {
     Entry findEntryByTitle(String title);
 
 
-
-
+    void deleteEntry(int diaryId, String title);
 }

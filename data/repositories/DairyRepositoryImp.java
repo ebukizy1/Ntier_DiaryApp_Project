@@ -5,19 +5,20 @@ import data.model.Diary;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DairyRepositoryImp implements DiaryRepository{
+public class DairyRepositoryImp implements DiaryRepository {
     private List<Diary> diaries = new ArrayList<>();
     private int counter = 1;
 
 
     @Override
-    public void save(Diary diary) {
-       if(diary.getID() == 0){
+    public Diary save(Diary diary) {
+        if (diary.getID() == 0) {
             diaries.add(diary);
             diary.setID(generateID());
-        }
-        else diaries.set(generateID()-1, diary);
-        }
+        } else diaries.set(generateID() - 1, diary);
+        return diary;
+    }
+
 
 
     @Override
@@ -44,6 +45,11 @@ public class DairyRepositoryImp implements DiaryRepository{
                 break;
             }}}
 
+    @Override
+    public void deleteAllDiary(int id) {
+
+    }
+
     private static boolean isID(int id, Diary diary) {
         boolean isID = diary.getID() == id;
         return isID;
@@ -55,10 +61,6 @@ public class DairyRepositoryImp implements DiaryRepository{
     }
 
 
-    @Override
-    public void deleteAllDiary() {
-
-    }
 
     @Override
     public void deleteDairyByUsername(String username) {
