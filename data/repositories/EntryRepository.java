@@ -11,10 +11,11 @@ public interface EntryRepository {
     List<Entry> findEntriesByDiaryId(String diaryId);
     List<Entry> findAllEntries();
     void deleteEntryByTitle(String title);
+    Entry findEntryByTitle(String title);
     void deleteEntryById(int id);
     void updateEntry(int id, String title, String body);
     int countNumberOfEntry();
-    Entry findEntryByTitle(String title);
+    Entry findEntryByTitle(int diaryID, String title);
 
 
     void deleteEntry(int diaryId, String title);

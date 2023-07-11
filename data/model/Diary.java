@@ -4,7 +4,7 @@ package data.model;
     public class Diary {
         private  String username;
         private String password;
-        private boolean isLocked = true;
+        private boolean isLogging ;
         private int ID;
 
         public int getID() {
@@ -33,12 +33,12 @@ package data.model;
             this.password = password;
         }
 
-        public boolean isLocked() {
-            return isLocked;
+        public boolean isLogging() {
+            return isLogging;
         }
 
-        public void setLocked(boolean locked) {
-            isLocked = locked;
+        public void setLogging(boolean logging) {
+            isLogging = logging;
         }
     }
 

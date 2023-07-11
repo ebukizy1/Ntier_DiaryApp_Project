@@ -12,7 +12,7 @@ public interface DiaryRepository {
     List<Diary> findAllDiaries();
     void deleteDairyById(int id);
     void deleteAllDiary(int id);
-    void deleteDairyByUsername(String username);
+    void deleteDiaryByUsername(String username);
     int countDiaryNumber();
     Diary findDiaryByUserName(String userName);
 

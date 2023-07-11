@@ -1,10 +1,9 @@
-package data.model;
+package dto;
 
 public class ChangeDiaryPasswordRequest {
    private String username;
     private String oldPassword;
     private String newPassword;
-    private String fourthField;
 
     public String getUsername() {
         return username;

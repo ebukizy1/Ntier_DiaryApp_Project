@@ -1,6 +1,5 @@
 package data.repositories;
 
-import data.model.Diary;
 import data.model.Entry;
 
 import java.util.ArrayList;
@@ -67,6 +66,13 @@ public class EntryRepositoriesImp implements EntryRepository {
 
 
     }
+    public Entry findEntryByTitle(String title) {
+        for(Entry entry : entries) {
+            boolean isTitle = entry.getTitle().equals(title);
+            if(isTitle)return entry;
+        }
+        return null;
+    }
 
     @Override
     public int countNumberOfEntry() {
@@ -74,9 +80,9 @@ public class EntryRepositoriesImp implements EntryRepository {
     }
 
     @Override
-    public Entry findEntryByTitle(String title) {
+    public Entry findEntryByTitle(int diaryID, String title) {
         for(Entry entry : entries) {
-            boolean isTitle = entry.getTitle().equals(title);
+            boolean isTitle = entry.getTitle().equals(title) && entry.getDiaryID() == diaryID;
             if(isTitle)return entry;
         }
         return null;

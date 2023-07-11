@@ -63,7 +63,7 @@ public class DairyRepositoryImp implements DiaryRepository {
 
 
     @Override
-    public void deleteDairyByUsername(String username) {
+    public void deleteDiaryByUsername(String username) {
         for(Diary diary : diaries) {
             boolean isUsername = diary.getUsername().equals(username);
             if (isUsername) {
